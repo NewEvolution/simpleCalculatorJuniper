@@ -86,7 +86,14 @@ namespace SimpleCalculatorTests
         [ExpectedException(typeof(ArgumentException))]
         public void ParseTooManyOperandsBreaks()
         {
-            string[] actual = Parse.Convert("-g//235");
+            string[] actual = Parse.Convert("-g---235");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ParseWeirdlyPlacedSpacesBreaks()
+        {
+            string[] actual = Parse.Convert("4 - - 235");
         }
     }
 }

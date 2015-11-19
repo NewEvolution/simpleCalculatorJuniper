@@ -10,9 +10,16 @@ namespace SimpleCalculator
     {
         public static string[] Convert(string input)
         {
+            input.Trim(' ');
+            int count = 0;
+            foreach (char character in input)
+            {
+                if (character == ' ') count++;
+            }
+            string nope = "Input is invalid";
+            if (count > 2) throw new ArgumentException(nope);
             string[] validOperands = new string[] { "*", "%", "/", "+", "-", "=" };
             string[] validSigns = new string[] { "+", "-" };
-            string nope = "Input is invalid";
             char[] allChars = input.ToCharArray();
             char toRemove = ' ';
             allChars = allChars.Where(character => character != toRemove).ToArray();
