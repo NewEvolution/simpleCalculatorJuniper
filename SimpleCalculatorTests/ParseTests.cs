@@ -8,77 +8,85 @@ namespace SimpleCalculatorTests
     public class ParseTests
     {
         [TestMethod]
-        public void ParseCanBeInstantiated()
-        {
-            Parse parser = new Parse();
-            Assert.IsNotNull(parser);
-        }
-
-        [TestMethod]
         public void ParseHasConvertMethodThatTakesStringAndReturnsCharArray()
         {
-            Parse parser = new Parse();
-            string[] actual = parser.Convert("1 + 2");
+            string[] actual = Parse.Convert("1 + 2");
             string[] expected = new string[] { "1", "+", "2" };
             CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ParseConvertThowsErrorWithIncompleteInput()
+        public void ParseThowsErrorWithIncompleteInput()
         {
-            Parse parser = new Parse();
-            string[] actual = parser.Convert("1 +");
+            string[] actual = Parse.Convert("1 +");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ParseConvertThowsErrorWithExtraInput()
+        public void ParseThowsErrorWithExtraInput()
         {
-            Parse parser = new Parse();
-            string[] actual = parser.Convert("1 + 1 - 4");
+            string[] actual = Parse.Convert("1 + 1 - 4");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ParseConvertThrowsErrorWithInvalidFirstArgument()
+        public void ParseThrowsErrorWithInvalidFirstArgument()
         {
-            Parse parser = new Parse();
-            string[] actual = parser.Convert("1b + 1");
+            string[] actual = Parse.Convert("1b + 1");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ParseConvertThrowsErrorWithInvalidLastArgument()
+        public void ParseThrowsErrorWithInvalidLastArgument()
         {
-            Parse parser = new Parse();
-            string[] actual = parser.Convert("1 + cc");
+            string[] actual = Parse.Convert("1 + cc");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ParseConvertThrowsErrorWithInvalidOperator()
+        public void ParseThrowsErrorWithInvalidOperator()
         {
-            Parse parser = new Parse();
-            string[] actual = parser.Convert("1 # 1");
+            string[] actual = Parse.Convert("1 # 1");
         }
 
         [TestMethod]
-        public void ParseConvertAcceptsSingleLetterArguments()
+        public void ParseAcceptsSingleLetterArguments()
         {
-            Parse parser = new Parse();
             string[] expected = new string[] { "1", "+", "c" };
-            string[] actual = parser.Convert("1 + c");
+            string[] actual = Parse.Convert("1 + c");
             CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void ParseConvertAcceptsLargerNumberArguments()
+        public void ParseAcceptsLargerNumberArguments()
         {
-            Parse parser = new Parse();
             string[] expected = new string[] { "g", "+", "235" };
-            string[] actual = parser.Convert("g + 235");
+            string[] actual = Parse.Convert("g + 235");
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ParseNoSpacesWorks()
+        {
+            string[] expected = new string[] { "g", "+", "235" };
+            string[] actual = Parse.Convert("g+235");
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ParseNegativesWorks()
+        {
+            string[] expected = new string[] { "-g", "+", "-235" };
+            string[] actual = Parse.Convert("-g+-235");
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ParseTooManyOperandsBreaks()
+        {
+            string[] actual = Parse.Convert("-g//235");
         }
     }
 }

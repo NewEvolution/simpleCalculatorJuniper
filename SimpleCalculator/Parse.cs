@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SimpleCalculator
 {
-    public class Parse
+    public static class Parse
     {
-        public string[] Convert(string input)
+        public static string[] Convert(string input)
         {
             string[] validOperands = new string[] { "*", "%", "/", "+", "-", "=" };
             string[] validSigns = new string[] { "+", "-" };
@@ -16,44 +16,67 @@ namespace SimpleCalculator
             char[] allChars = input.ToCharArray();
             char toRemove = ' ';
             allChars = allChars.Where(character => character != toRemove).ToArray();
-            StringBuilder firstArg = new StringBuilder();
-            StringBuilder secondArg = new StringBuilder();
+            StringBuilder argBuilder = new StringBuilder();
+            string firstArgument = "";
+            string operand = "";
+            string secondArgument = "";
+            bool startOfArgument = true;
             for (int i = 0; i < allChars.Length; i++)
             {
                 string character = allChars[i].ToString();
-                if (!character.All(char.IsLetterOrDigit) && !validOperands.Contains(character))
+                if (startOfArgument)
                 {
-                    throw new ArgumentException(nope);
-                }
-                if (i == 0)
-                {
-                    if (!character.All(char.IsLetterOrDigit) && !validSigns.Contains(character))
+                    if (character.All(char.IsLetterOrDigit) || validSigns.Contains(character))
                     {
-                        throw new ArgumentException(nope);
+                        startOfArgument = false;
+                        argBuilder.Append(character);
+                        continue;
                     }
                     else
                     {
-                        firstArg.Append(allChars[i]);
+                        throw new ArgumentException(nope);
                     }
                 }
-                else if (validSigns.Contains(allChars[i - 1].ToString()))
+                else
                 {
-
+                    string previousCharacter = allChars[i - 1].ToString();
+                    if (validSigns.Contains(previousCharacter) && character.All(char.IsLetterOrDigit))
+                    {
+                        argBuilder.Append(character);
+                        continue;
+                    }
+                    if (previousCharacter.All(char.IsDigit) && character.All(char.IsDigit))
+                    {
+                        argBuilder.Append(character);
+                        continue;
+                    }
+                    if (previousCharacter.All(char.IsLetterOrDigit) && validOperands.Contains(character))
+                    {
+                        firstArgument = argBuilder.ToString();
+                        argBuilder = new StringBuilder();
+                        if (operand == "")
+                        {
+                            operand = character;
+                        }
+                        else
+                        {
+                            throw new ArgumentException(nope);
+                        }
+                        startOfArgument = true;
+                        continue;
+                    }
+                    throw new ArgumentException(nope);
                 }
             }
-            if(validSigns.Contains(allChars[0].ToString()))
+            secondArgument = argBuilder.ToString();
+            string[] output = new string[3] { firstArgument, operand, secondArgument};
+            foreach (string item in output)
             {
-
+                if (item == "")
+                {
+                    throw new ArgumentException(nope);
+                }
             }
-            string[] output = new string[3];
-            if (output.Length != 3) throw new ArgumentException(nope);
-            int firstArg;
-            int secondArg;
-            bool firstArgIsInt = int.TryParse(output[0], out firstArg);
-            bool secondArgIsInt = int.TryParse(output[2], out secondArg);
-            if (!firstArgIsInt && (output[0].Length > 1 || !output[0].All(char.IsLetter))) throw new ArgumentException(nope);
-            if (output[1].Length > 1 || !validOperands.Contains(output[1])) throw new ArgumentException(nope);
-            if (!secondArgIsInt && (output[2].Length > 1 || !output[2].All(char.IsLetter))) throw new ArgumentException(nope);
             return output;
         }
     }
