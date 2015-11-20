@@ -12,10 +12,7 @@ namespace SimpleCalculator
         {
             input.Trim(' ');
             int count = 0;
-            foreach (char character in input)
-            {
-                if (character == ' ') count++;
-            }
+            foreach (char character in input) if (character == ' ') count++;
             string nope = "Input is invalid";
             if (count > 2) throw new ArgumentException(nope);
             string[] validOperands = new string[] { "*", "%", "/", "+", "-", "=" };

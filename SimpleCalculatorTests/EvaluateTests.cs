@@ -69,5 +69,32 @@ namespace SimpleCalculatorTests
             int actual = Evaluate.Eval(Parse.Convert("212--13"));
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void EvaluateImplementsStackLastE()
+        {
+            string[] expected = new string[3] { "3", "+", "4" };
+            Evaluate.Eval(Parse.Convert("3+4"));
+            string[] actual = Stack.LastE;
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void EvaluateImplementsStackLast()
+        {
+            int expected = 7;
+            Evaluate.Eval(Parse.Convert("3+4"));
+            int actual = Stack.Last;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void EvaluateImplementsConstants()
+        {
+            int expected = 7;
+            Evaluate.Eval(Parse.Convert("A = 3"));
+            int actual = Evaluate.Eval(Parse.Convert("a + 4"));
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
