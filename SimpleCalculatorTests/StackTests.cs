@@ -10,16 +10,16 @@ namespace SimpleCalculatorTests
         [TestMethod]
         public void StackStoresAnExpression()
         {
-            string[] expected = new string[3] { "3", "+", "4" };
-            Stack.LastE = new string[3] { "3", "+", "4" };
-            CollectionAssert.AreEqual(expected, Stack.LastE);
+            string expected = "3 + 4";
+            Stack.LastE = "3 + 4";
+            Assert.AreEqual(expected, Stack.LastE);
         }
 
         [TestMethod]
         public void StackStoresAResult()
         {
-            int expected = 7;
-            Stack.Last = 7;
+            string expected = "7";
+            Stack.Last = "7";
             Assert.AreEqual(expected, Stack.Last);
         }
     }

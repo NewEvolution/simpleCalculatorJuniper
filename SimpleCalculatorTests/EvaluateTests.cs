@@ -10,40 +10,40 @@ namespace SimpleCalculatorTests
         [TestMethod]
         public void EvaluateAdditionAdds()
         {
-            int expected = 3;
-            int actual = Evaluate.Eval(Parse.Convert("1 + 2"));
+            string expected = "3";
+            string actual = Evaluate.Eval(Parse.Convert("1 + 2"));
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void EvaluateSubractionSubtracts()
         {
-            int expected = -3;
-            int actual = Evaluate.Eval(Parse.Convert("-2-1"));
+            string expected = "-3";
+            string actual = Evaluate.Eval(Parse.Convert("-2-1"));
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void EvaluateMultiplicationMultiplies()
         {
-            int expected = 20;
-            int actual = Evaluate.Eval(Parse.Convert("5 * 4"));
+            string expected = "20";
+            string actual = Evaluate.Eval(Parse.Convert("5 * 4"));
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void EvaluateDivideDivides()
         {
-            int expected = 3;
-            int actual = Evaluate.Eval(Parse.Convert("12 / 4"));
+            string expected = "3";
+            string actual = Evaluate.Eval(Parse.Convert("12 / 4"));
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void EvaluateModuloModulos()
         {
-            int expected = 2;
-            int actual = Evaluate.Eval(Parse.Convert("14 % 3"));
+            string expected = "2";
+            string actual = Evaluate.Eval(Parse.Convert("14 % 3"));
             Assert.AreEqual(expected, actual);
         }
 
@@ -51,49 +51,77 @@ namespace SimpleCalculatorTests
         [ExpectedException(typeof(DivideByZeroException))]
         public void EvaluateErrorsWithInvalidInput()
         {
-            int actual = Evaluate.Eval(Parse.Convert("5 / 0"));
+            string actual = Evaluate.Eval(Parse.Convert("5 / 0"));
         }
 
         [TestMethod]
         public void EvaluateHandlesComplicatedValidInput()
         {
-            int expected = -225;
-            int actual = Evaluate.Eval(Parse.Convert("-212 - +13"));
+            string expected = "-225";
+            string actual = Evaluate.Eval(Parse.Convert("-212 - +13"));
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void EvaluateHandlesOtherComplicatedValidInput()
         {
-            int expected = 225;
-            int actual = Evaluate.Eval(Parse.Convert("212--13"));
+            string expected = "225";
+            string actual = Evaluate.Eval(Parse.Convert("212--13"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void EvaluateSetsStackLastE()
+        {
+            string expected = "3 + 4";
+            Evaluate.Eval(Parse.Convert("3+4"));
+            string actual = Stack.LastE;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void EvaluateSetsStackLast()
+        {
+            string expected = "7";
+            Evaluate.Eval(Parse.Convert("3+4"));
+            string actual = Stack.Last;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void EvaluateImplementsStackLast()
+        {
+            string expected = "7";
+            Evaluate.Eval(Parse.Convert("3+4"));
+            string actual = Evaluate.Eval(Parse.Convert("Last"));
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void EvaluateImplementsStackLastE()
         {
-            string[] expected = new string[3] { "3", "+", "4" };
-            Evaluate.Eval(Parse.Convert("3+4"));
-            string[] actual = Stack.LastE;
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void EvaluateImplementsStackLast()
-        {
-            int expected = 7;
-            Evaluate.Eval(Parse.Convert("3+4"));
-            int actual = Stack.Last;
+            string expected = "-7 + 12";
+            Evaluate.Eval(Parse.Convert("-7+12"));
+            string actual = Evaluate.Eval(Parse.Convert("LastE"));
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void EvaluateImplementsConstants()
         {
-            int expected = 7;
+            string expected = "7";
             Evaluate.Eval(Parse.Convert("A = 3"));
-            int actual = Evaluate.Eval(Parse.Convert("a + 4"));
+            string actual = Evaluate.Eval(Parse.Convert("a + 4"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void EvaluateCanUseConstantsToDefineConstants()
+        {
+            string expected = "14";
+            Evaluate.Eval(Parse.Convert("b = 7"));
+            Evaluate.Eval(Parse.Convert("c = b"));
+            string actual = Evaluate.Eval(Parse.Convert("C + 7"));
             Assert.AreEqual(expected, actual);
         }
     }

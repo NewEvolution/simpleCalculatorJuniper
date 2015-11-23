@@ -10,42 +10,55 @@ namespace SimpleCalculator
     {
         public static Constants cons = new Constants();
 
-        public static int Eval(string[] parsedData)
+        public static string Eval(string[] parsedData)
         {
-            Stack.LastE = parsedData;
             int argument1;
             int argument2;
+            string nope = "input is invalid";
             bool arg1test = int.TryParse(parsedData[0], out argument1);
             bool arg2test = int.TryParse(parsedData[2], out argument2);
             int value = 0;
-            switch (parsedData[1])
+            if (parsedData[1] == "=")
             {
-                case "=":
-                    if (!arg1test) cons.Store(parsedData[0], argument2);
-                    break;
-                case "+":
-                    if (!arg1test) argument1 = cons.Retrieve(parsedData[0]);
-                    value = Add(argument1, argument2);
-                    break;
-                case "-":
-                    if (!arg1test) argument1 = cons.Retrieve(parsedData[0]);
-                    value = Subtract(argument1, argument2);
-                    break;
-                case "*":
-                    if (!arg1test) argument1 = cons.Retrieve(parsedData[0]);
-                    value = Multiply(argument1, argument2);
-                    break;
-                case "/":
-                    if (!arg1test) argument1 = cons.Retrieve(parsedData[0]);
-                    value = Divide(argument1, argument2);
-                    break;
-                case "%":
-                    if (!arg1test) argument1 = cons.Retrieve(parsedData[0]);
-                    value = Modulo(argument1, argument2);
-                    break;
+                if (!arg2test) argument2 = cons.Retrieve(parsedData[2]);
+                if (!arg1test) cons.Store(parsedData[0], argument2);
+                else throw new ArgumentException(nope);
+                return "saved '" + parsedData[0] + "' as '" + argument2.ToString() + "'" ;
             }
-            Stack.Last = value;
-            return value;
+            else if (parsedData[1] == "Last")
+            {
+                return Stack.Last;
+            }
+            else if (parsedData[1] == "LastE")
+            {
+                return Stack.LastE;
+            }
+            else
+            {
+                if (!arg1test) argument1 = cons.Retrieve(parsedData[0]);
+                if (!arg2test) argument2 = cons.Retrieve(parsedData[2]);
+                switch (parsedData[1])
+                {
+                    case "+":
+                        value = Add(argument1, argument2);
+                        break;
+                    case "-":
+                        value = Subtract(argument1, argument2);
+                        break;
+                    case "*":
+                        value = Multiply(argument1, argument2);
+                        break;
+                    case "/":
+                        value = Divide(argument1, argument2);
+                        break;
+                    case "%":
+                        value = Modulo(argument1, argument2);
+                        break;
+                }
+            }
+            Stack.LastE = String.Join(" ", parsedData);
+            Stack.Last = value.ToString();
+            return value.ToString();
         }
 
         private static int Modulo(int argument1, int argument2)

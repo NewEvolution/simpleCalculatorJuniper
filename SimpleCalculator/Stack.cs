@@ -8,7 +8,7 @@ namespace SimpleCalculator
 {
     public static class Stack
     {
-        public static int Last { get; set; }
-        public static string[] LastE { get; set; }
+        public static string Last { get; set; }
+        public static string LastE { get; set; }
     }
 }

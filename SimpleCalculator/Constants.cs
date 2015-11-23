@@ -15,7 +15,7 @@ namespace SimpleCalculator
             int unused;
             key = key.ToLower();
             bool test = constants.TryGetValue(key, out unused);
-            if (test) throw new ArgumentException(key + " is already defined.");
+            if (test) throw new ArgumentException(key + " is already defined");
             else constants.Add(key, value);
         }
 
@@ -25,7 +25,7 @@ namespace SimpleCalculator
             key = key.ToLower();
             bool test = constants.TryGetValue(key, out value);
             if (test) return value;
-            else throw new KeyNotFoundException(key + " is not defined.");
+            else throw new KeyNotFoundException(key + " is not defined");
         }
     }
 }

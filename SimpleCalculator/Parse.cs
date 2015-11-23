@@ -11,15 +11,16 @@ namespace SimpleCalculator
         public static string[] Convert(string input)
         {
             input.Trim(' ');
+            if (input.ToLower() == "last") return new string[3] { "", "Last", "" };
+            if (input.ToLower() == "laste") return new string[3] { "", "LastE", "" };
             int count = 0;
             foreach (char character in input) if (character == ' ') count++;
-            string nope = "Input is invalid";
+            string nope = "input is invalid";
             if (count > 2) throw new ArgumentException(nope);
             string[] validOperands = new string[] { "*", "%", "/", "+", "-", "=" };
             string[] validSigns = new string[] { "+", "-" };
             char[] allChars = input.ToCharArray();
-            char toRemove = ' ';
-            allChars = allChars.Where(character => character != toRemove).ToArray();
+            allChars = allChars.Where(character => character != ' ').ToArray();
             StringBuilder argBuilder = new StringBuilder();
             string firstArgument = "";
             string operand = "";
